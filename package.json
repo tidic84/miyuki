@@ -1,7 +1,7 @@
 {
   "name": "miyuki",
   "version": "1.0.0",
-  "description": "",
+  "description": "Miyuki Bot",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
@@ -11,6 +11,8 @@
   "dependencies": {
     "discord-buttons": "^3.2.1",
     "discord.js": "^12.5.3",
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "fs": "0.0.1-security",
+    "node": "^16.3.0"
   }
 }
