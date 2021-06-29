@@ -26,6 +26,6 @@ module.exports.run = (client, message, args) => {
 module.exports.help = {
     name: "avatar",
     description: "Affiche ton avatar ou celui d'un membre",
-    // aliases: [ 'pp', 'pdp' ],
-    // category: 'misc'
+    aliases: [ 'pp', 'pdp' ],
+    category: 'misc'
 }
