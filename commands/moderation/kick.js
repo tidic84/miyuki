@@ -1,7 +1,7 @@
 const { MessageEmbed } = require('discord.js');
 const { blue, green, yellow, red } = require('../../colors.json')
 
-module.exports.run = async (client, message, settings, args) => {
+module.exports.run = async (client, message, args) => {
     
     
         if(!message.member.hasPermission('KICK_MEMBERS')) {

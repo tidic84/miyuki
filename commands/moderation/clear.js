@@ -5,7 +5,7 @@ const client = new Discord.Client()
 const { blue, green, yellow, red } = require('../../colors.json')
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
-module.exports = async (client, message, settings, args) => {
+module.exports.run = async (client, message, args) => {
 
             const ammount = parseInt(args[0]);
 

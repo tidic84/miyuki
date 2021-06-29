@@ -34,15 +34,7 @@ module.exports = async (Discord, client, message) => {
     time_stamps.set(`${message.author.id}:${message.guild.id}`, current_time);
     setTimeout(() => time_stamps.delete(`${message.author.id}:${message.guild.id}`), cooldown_amount);
 
-    if(command.help.args && !args.length){
-        const embed = new MessageEmbed()
-                    .setTitle(`Erreur`)
-                    .setColor(`${red}`)
-                    .setDescription(`:x: Vous avez oublié de mettre des arguments!`)
-                    .attachFiles(img)
-                    .setImage('attachment://oups.gif')
-            message.channel.send(embed);
-    }
+    if(command.help.args && !args.length){client.errorMessage(message, "Tu as oublié les arguments")}
 
     // Execute Command
     if(command) {
@@ -53,9 +45,7 @@ module.exports = async (Discord, client, message) => {
             const embed = new MessageEmbed()
                     .setTitle(`Erreur`)
                     .setColor(`${red}`)
-                    .setDescription(`:x: Oups, la commande n'a pas pu s'exécuter !`)
-                    .attachFiles(img)
-                    .setImage('attachment://oups.gif')
+                    .setImage('https://media.discordapp.net/attachments/855018848897466381/859479979641274398/oups.gif')
                     .setFooter(`${error}`)
             message.channel.send(embed);
         }
