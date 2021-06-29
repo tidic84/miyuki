@@ -1,7 +1,8 @@
 const { MessageEmbed, MessageAttachment } = require('discord.js');
 const { blue, green, yellow, red } = require(`../../colors.json`)
-require('dotenv').config();
 const img = new MessageAttachment('./assets/img/oups.gif');
+
+require('dotenv').config();
 
 const cooldowns = new Map();
 
@@ -11,7 +12,7 @@ module.exports = async (Discord, client, message) => {
 
     const args = message.content.slice(process.env.PREFIX.length).split(/ +/);
     const cmd = args.shift().toLowerCase();
-    const command = await client.commands.get(cmd) || client.commands.find(a => a.aliases && a.aliases.includes(cmd));
+    const command = await client.commands.get(cmd) || client.commands.find(a => a.help.aliases && a.help.aliases.includes(cmd));
 
     if(!command) return;
 
@@ -33,7 +34,15 @@ module.exports = async (Discord, client, message) => {
     time_stamps.set(`${message.author.id}:${message.guild.id}`, current_time);
     setTimeout(() => time_stamps.delete(`${message.author.id}:${message.guild.id}`), cooldown_amount);
 
-
+    if(command.help.args && !args.length){
+        const embed = new MessageEmbed()
+                    .setTitle(`Erreur`)
+                    .setColor(`${red}`)
+                    .setDescription(`:x: Vous avez oublié de mettre des arguments!`)
+                    .attachFiles(img)
+                    .setImage('attachment://oups.gif')
+            message.channel.send(embed);
+    }
 
     // Execute Command
     if(command) {

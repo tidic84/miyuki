@@ -1,9 +1,7 @@
 const { MessageEmbed } = require('discord.js');
 const { blue, green, yellow, red, purple } = require('../../colors.json')
 
-module.exports.run = async (client, message) => {
-
-    
+module.exports.run = async (client, message) => {    
         const embed = new MessageEmbed()
             .setTitle(`Ping`)
             .setDescription(`Latence du bot: \`---ms\`
