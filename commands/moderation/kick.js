@@ -53,7 +53,7 @@ module.exports.run = async (client, message, args) => {
         const embed = new MessageEmbed()
                 .setTitle(`Kick`)
                 .setColor(`${green}`)
-                .setDescription(`:white_check_mark: ${member.user.tag} a été exclu !`)
+                .setDescription(`:white_check_mark: ${member.user.tag} s'est fait désintégré`)
         message.channel.send(embed);
         
 };
