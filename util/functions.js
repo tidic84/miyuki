@@ -1,5 +1,6 @@
 const { MessageEmbed, MessageAttachment } = require('discord.js');
-const { blue, green, yellow, red } = require(`../colors.json`)
+const { blue, green, yellow, red } = require(`../colors.json`);
+const fs = require('fs');
 module.exports = async (client) => {
 
     client.errorMessage = async (message, errMessage) => {
@@ -17,5 +18,10 @@ module.exports = async (client) => {
         return a[0].toUpperCase() + a.substring(1)
     }
 
-    console.log(`${client.upFirst('teeesstt').toString()}`);
+    client.saveDB = (DB, message) => {
+        fs.writeFile("./res/db.json", JSON.stringify(DB, null, 4), err => {
+            if (err) return console.log(err)//client.errorMessage(message, err);
+        })
+    }
+
 }
