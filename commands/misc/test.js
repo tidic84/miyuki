@@ -6,7 +6,6 @@ module.exports.run = (client, message, args) => {
     client.saveDB(DB, message);
     if (!DB[message.guild.id]) {
         DB[message.guild.id] = {}
-        //DB[message.guild.id] = {"Nom": message.guild.name}
     }
     DB[message.guild.id]["test"] = "test"
     DB[message.guild.id]["truc"] =  "truc"
