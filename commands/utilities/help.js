@@ -18,7 +18,7 @@ module.exports.run = async (client, message, args) => {
         await client.upFirst(`${category}`).then(result => {catName = result})
         embed.addField(
             `__${catName}__`,
-            `${client.commands.filter(cat => cat.help.category === category.toLocaleLowerCase()).map(cmd => `\`${cmd.help.name}\``).join(', ')}`
+            `${client.commands.filter(cat => cat.help.category === category.toLocaleLowerCase()).map(cmd => `\`${cmd.help.name}\``).join(' | ')}`
         )
     }
     message.channel.send(embed)
