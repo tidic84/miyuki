@@ -8,7 +8,7 @@ module.exports = (client, Discord) => {
         for (const file of commands) {
             const commandFile = require(`../${dir}/${dirs}/${file}`);
             client.commands.set(commandFile.help.name, commandFile);
-            console.log(`Commande chargé --> ${commandFile.help.name}`);
+            //console.log(`Commande chargé --> ${commandFile.help.name}`);
             }
         })
     }

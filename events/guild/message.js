@@ -8,9 +8,17 @@ const cooldowns = new Map();
 
 module.exports = async (Discord, client, message) => {
 
-    if(!message.content.startsWith(process.env.PREFIX) || message.author.bot) return;
+    const settings = await client.getGuild(message.guild);
+    let profileData = "";
+    if (message.member.user.bot){
+        return
+    }else {
+        profileData = await client.getProfile(message.member)
+    };
 
-    const args = message.content.slice(process.env.PREFIX.length).split(/ +/);
+    if(!message.content.startsWith(settings.prefix) || message.author.bot) return;
+
+    const args = message.content.slice(settings.prefix.length).split(/ +/);
     const cmd = args.shift().toLowerCase();
     const command = await client.commands.get(cmd) || client.commands.find(a => a.help.aliases && a.help.aliases.includes(cmd));
 
@@ -34,20 +42,13 @@ module.exports = async (Discord, client, message) => {
     time_stamps.set(`${message.author.id}:${message.guild.id}`, current_time);
     setTimeout(() => time_stamps.delete(`${message.author.id}:${message.guild.id}`), cooldown_amount);
 
-    if(command.help.args && !args.length){client.errorMessage(message, "Tu as oublié les arguments")}
-
     // Execute Command
     if(command) {
          try {
-             command.run(client, message, args, cmd, Discord);
+             command.run(client, message, args, settings, cmd, Discord);
          } catch (error) {
             console.error(error);
-            const embed = new MessageEmbed()
-                    .setTitle(`Erreur`)
-                    .setColor(`${red}`)
-                    .setImage('https://media.discordapp.net/attachments/855018848897466381/859479979641274398/oups.gif')
-                    .setFooter(`${error}`)
-            message.channel.send(embed);
+            client.errorMessage(message, error)
         }
     }
 }

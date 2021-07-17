@@ -1,56 +1,70 @@
+const { settings } = require('cluster');
 const { MessageEmbed } = require('discord.js');
 const { blue, green, yellow, red, purple } = require('../../colors.json')
-const DB = require("../../res/db.json")
 
-module.exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args, settings) => {
 
-    if(!DB[message.guild.id]["channel"])return client.errorMessage(message, "Le channel n'est pas défini")
-    if(!args[0])return client.errorMessage(message, `L'emoji n'est pas défini \n\`add <:emoji:/emojiId> <@role/roleId>\``)
-    if(!args[1])return client.errorMessage(message, "Le role n'est pas défini \n\`add <:emoji:/emojiId> <@role/roleId>\`")
+    
+     
+
+    if(!settings.channel)return client.errorMessage(message, `Le channel n'est pas défini\nUsage: \`channel <channelid/channel>\``)
+    if(!settings.message)return client.errorMessage(message, `Le message n'est pas défini\nUsage: \`message <messageid>\``)
+    if(!args[0])return client.errorMessage(message, `L'emoji n'est pas défini`, this)
+    if(!args[1])return client.errorMessage(message, "Le role n'est pas défini", this)
             
     let emoji = `${args[0]}`;
     let roleID = `${args[1]}`;
     roleID = roleID.toString().replace("<", "").replace("@", "").replace("&", "").replace(">", "");
     let role = message.guild.roles.cache.find(role => role.id === roleID);
-    channel = DB[message.guild.id]["channel"];
-    
-    let msg = await message.guild.channels.cache.get(DB[message.guild.id]["channel"]).messages.fetch(DB[message.guild.id]["message"]);
-
-    if (!DB[message.guild.id]["messageReactEventAdd"]) {
-        DB[message.guild.id]["messageReactEventAdd"] = {}
-        client.saveDB(DB, message);
-    }
-
-    if (!DB[message.guild.id]["messageReactEventAdd"][msg.id]) {
-        DB[message.guild.id]["messageReactEventAdd"][msg.id] = {}
-        client.saveDB(DB, message);
-    }
+        
+    let msg = await message.guild.channels.cache.get(settings.channel).messages.fetch(settings.message);
+    // if(!settings.messageReact[msg.id]) {
+    //     client.updateGuild(message.guild, { messageReact: [msg.id]["1234"] })
+    // }
     
     client.on('messageReactionAdd', async (reaction, user) => {
         if (!user.bot) return
-        console.log('hey2')
         if (reaction._emoji.id == null) {
+            let msgR = settings.messageReact
+            if (!msgR.has(msg.id)){
+                let msgReact = new Map()
+                msgReact.set(msg.id, new Map())
+                await client.updateGuild(message.guild, { messageReact: msgReact })
+            }
 
-            DB[message.guild.id]["messageReactEventAdd"][msg.id][`!${reaction._emoji.name}`] = role.id;
-            return client.saveDB(DB, message);
+            let emojisRole = msgR.get(msg.id)
+            emojisRole[`!${reaction._emoji.name}`] = role.id
+            let msgReact = new Map()
+            msgReact.set(msg.id, emojisRole)
+
+            client.updateGuild(message.guild, { messageReact: msgReact })
+
 
         } else {  
 
-            DB[message.guild.id]["messageReactEventAdd"][msg.id][reaction._emoji.id] = role.id;
-            return client.saveDB(DB, message);
+            let msgR = settings.messageReact
+            if (!msgR.has(msg.id)){
+                let msgReact = new Map()
+                msgReact.set(msg.id, new Map())
+                await client.updateGuild(message.guild, { messageReact: msgReact })
+            }
+
+            let emojisRole = msgR.get(msg.id)
+            emojisRole[reaction._emoji.id] = role.id
+            let msgReact = new Map()
+            msgReact.set(msg.id, emojisRole)
+
+            client.updateGuild(message.guild, { messageReact: msgReact })
 
         }
     })
     msg.react(emoji)
 
-    // DB[message.guild.id]["messageReactEventAdd"][msg.id][emoji] = role.id;
-    // client.saveDB(DB, message);
-
     const embed = new MessageEmbed()
         .setTitle(`Réaction ajouté !`)
         .setAuthor(message.member.displayName, message.author.displayAvatarURL({ dynamic : true }))
         .setColor(`${purple}`)
-        .addField("Salon", `<#${channel}>`)
+        .addField("Salon", `<#${settings.channel}>`)
         .addField("Message", `${msg.id} | ${msg}`)
         .addField("Emoji", `${emoji}`)
         .addField("Role", `${role}`)
@@ -63,5 +77,6 @@ module.exports.help = {
     name: "add",
     description: "add role by reaction",
     usage: "add <:emoji:/emojiId> <@role/roleId>",
-    category: 'reaction-role'
+    category: 'reaction-role',
+    cooldown: 5
 }

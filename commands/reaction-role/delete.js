@@ -4,7 +4,7 @@ const DB = require("../../res/db.json")
 
 module.exports.run = async (client, message, args) => {
 
-    if(!args[0])return client.errorMessage(message, `L'emoji n'est pas défini\n\`delete <:emoji:/emojiId>\``)
+    if(!args[0])return client.errorMessage(message, `L'emoji n'est pas défini`, this)
             
     let emoji = `${args[0]}`;
         
@@ -22,7 +22,6 @@ module.exports.run = async (client, message, args) => {
         .addField("Emoji", `${emoji}`)
         .addField("Role", `${role}`)
     message.channel.send(embed);
-
 
 };
 

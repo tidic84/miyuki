@@ -26,7 +26,7 @@ module.exports.run = async (client, message, args) => {
     } else {
 
         const command = await client.commands.get(args[0]) || client.commands.find(a => a.help.aliases && a.help.aliases.includes(args[0]));
-        if(!command) return  client.errorMessage(message, "Cette commande n'existe pas")
+        if(!command) return  client.errorMessage(message, "Cette commande n'existe pas", this)
         
         let cmdName = "";
         await client.upFirst(`${command.help.name}`).then(result => {cmdName = result})
@@ -50,6 +50,7 @@ module.exports.run = async (client, message, args) => {
 module.exports.help = {
     name: 'help',
     description: 'Affiche la liste des commandes',
+    usage: 'help <command name>',
     category: 'utilities',
     cooldown:5,
 }
