@@ -25,22 +25,29 @@ module.exports = async (client) => {
         return a[0].toUpperCase() + a.substring(1)
     }
 
-    // client.loadMessagesReact = async () => {
-    //     for (const server of Object.keys(client.guilds.map)) {
-    //         var guild = client.guilds.cache.get(server)
-    //         await console.log(guild)
-    //         await console.log(server)
+     client.loadMessagesReact = async (client) => {
 
-    //         const settings = await  client.getGuild(guild)
-    //         await console.log(settings)
-    //         for (const messages of Object.keys(settings.messageReact)){
-    //             // guild.channels.cache.get(DB[guild.id]["channel"]).messages.fetch(DB[guild.id]["message"]);
-    //             for (const channels of guild.channels){
-    //                 guild.channels.cache.get(channels).messages.fetch(messages);
-    //             }
-    //         }
-    //     }
-    // }
+        client.guilds.cache.forEach(async guild => {
+
+                 const settings = await client.getGuild(guild)
+                     guild.channels.cache.forEach(async channels => {
+                         if(!channels.messages) return;
+                        //console.log(settings.messageReact.keys())
+                        //console.log(Object.keys(settings.messageReact))
+                        for (const messages of settings.messageReact.keys()) {
+                        //settings.messageReact.forEach(messages => {
+
+                            //console.log(messages)
+                            //console.log(settings.messageReact)
+                            //console.log(Object.keys(settings.messageReact))
+                           const channel = guild.channels.cache.get(channels.id)//.messages.fetch(messages)
+                           channel.messages.fetch(messages).catch(error => {})
+                           //console.log(guild.channels.cache.get(channels.id).messages.cache)
+                  
+                        }//)   
+                })
+            })
+        }
 
     // Guild Functions
 
