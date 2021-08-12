@@ -1,4 +1,5 @@
 module.exports = async (Discord, client, reaction, user) => {
+    if(user.bot) return
     const settings = await client.getGuild(reaction.message.guild);
 
     // Add Role for /add reactions

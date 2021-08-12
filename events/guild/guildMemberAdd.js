@@ -15,21 +15,34 @@ module.exports = async (Discord, client, member) => {
     
     
     // Join Message
+    const welcomeType = settings.welcome || "message"
     const channel = client.channels.cache.get(settings.welcomeChannel);
     let msg = settings.welcomeMessage;
     if (msg.includes("{{USER}}")) msg = await msg.replace("{{USER}}", member);
     if (msg.includes("{{SERVER_NAME}}")) msg = await msg.replace("{{SERVER_NAME}}", member.guild);
-    const embed = new MessageEmbed()
+    switch(welcomeType) {
+        case "message": {
+            return channel.send(msg)
+        }
+        case "image": {
+            return channel.send("Bah non, j'ai pas encore fait")
+        }
+        case "embed": {
+            const embed = new MessageEmbed()
         .setTitle('Heyy !!')
         .setDescription(msg)
         .setImage(member.user.displayAvatarURL({ dynamic : true}))
         .setColor(`${blue}`)
         .setFooter(date)
     try {
-    channel.send(embed)
+    return channel.send(embed)
     } catch (error) {
         console.log(error)
     }
+        }
+    }
+
+    
 
     // Init money system
     const newProfile = {

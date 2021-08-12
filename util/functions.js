@@ -29,22 +29,16 @@ module.exports = async (client) => {
 
         client.guilds.cache.forEach(async guild => {
 
-                 const settings = await client.getGuild(guild)
-                     guild.channels.cache.forEach(async channels => {
-                         if(!channels.messages) return;
-                        //console.log(settings.messageReact.keys())
-                        //console.log(Object.keys(settings.messageReact))
-                        for (const messages of settings.messageReact.keys()) {
-                        //settings.messageReact.forEach(messages => {
-
-                            //console.log(messages)
-                            //console.log(settings.messageReact)
-                            //console.log(Object.keys(settings.messageReact))
-                           const channel = guild.channels.cache.get(channels.id)//.messages.fetch(messages)
-                           channel.messages.fetch(messages).catch(error => {})
-                           //console.log(guild.channels.cache.get(channels.id).messages.cache)
+            const settings = await client.getGuild(guild)
+                guild.channels.cache.forEach(async channels => {
+                    if(!channels.messages) return;
+                    
+                    for (const messages of settings.messageReact.keys()) {
+                        
+                        const channel = guild.channels.cache.get(channels.id)
+                        channel.messages.fetch(messages).catch(error => {})
                   
-                        }//)   
+                    } 
                 })
             })
         }
