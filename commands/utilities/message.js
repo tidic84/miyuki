@@ -1,4 +1,3 @@
-const { default: discordButtons } = require('discord-buttons');
 const { MessageEmbed } = require('discord.js');
 const { blue, green, yellow, red, purple } = require('../../colors.json')
 
@@ -17,8 +16,6 @@ module.exports.run = async (client, message, args, settings) => {
     if (isValid == false) return client.errorMessage(message, "Ce message est inexistant", this)
 
     client.updateGuild(message.guild, { message: msg })
-
-    //const msg2 = await message.guild.channels.cache.get(DB[message.guild.id]["channel"]).messages.fetch(DB[message.guild.id]["message"]);
 
     const embed = new MessageEmbed()
         .setTitle(`Message défini`)

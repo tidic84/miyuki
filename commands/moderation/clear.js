@@ -1,7 +1,5 @@
 
 const { MessageEmbed } = require('discord.js');
-const Discord = require('discord.js');
-const client = new Discord.Client()
 const { blue, green, yellow, red } = require('../../colors.json')
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
