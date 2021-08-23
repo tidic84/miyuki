@@ -30,7 +30,7 @@ module.exports = async (Discord, client, message) => {
     }
     const current_time = Date.now();
     const time_stamps = cooldowns.get(command.name);
-    const cooldown_amount = (command.cooldown) * 1000;
+    const cooldown_amount = (command.help.cooldown) * 1000;
     if(time_stamps.has(`${message.author.id}:${message.guild.id}`)){
         const expiration_time = time_stamps.get(`${message.author.id}:${message.guild.id}`) + cooldown_amount;
         if(current_time < expiration_time){
@@ -45,7 +45,7 @@ module.exports = async (Discord, client, message) => {
     // Execute Command
     if(command) {
          try {
-             command.run(client, message, args, settings, cmd, Discord);
+             command.run(client, message, args, settings, profileData, cmd, Discord);
          } catch (error) {
             console.error(error);
             client.errorMessage(message, error)

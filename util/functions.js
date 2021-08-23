@@ -10,7 +10,6 @@ module.exports = async (client) => {
         const embed = new MessageEmbed()
                     .setTitle(`Erreur`)
                     .setColor(`${red}`)
-                    .setImage('https://media.discordapp.net/attachments/855018848897466381/859479979641274398/oups.gif')
                     if(cmd){
                         embed.setDescription(`:x: ${errMessage}
                         Usage: \`${cmd.help.usage}\``)
@@ -21,7 +20,6 @@ module.exports = async (client) => {
     }
 
     client.upFirst = async a =>{
-        //console.log(a[0].toUpperCase() + a.substring(1))
         return a[0].toUpperCase() + a.substring(1)
     }
 
@@ -43,7 +41,9 @@ module.exports = async (client) => {
             })
         }
 
+    //
     // Guild Functions
+    //
 
     client.createGuild = async guild => {
         const merged = Object.assign({ _id: mongoose.Types.ObjectId() }, guild);
@@ -89,7 +89,9 @@ module.exports = async (client) => {
 
     }
 
+    //
     // User Functions
+    //
 
     client.createProfile = async (member) => {
         const merged = Object.assign({ _id: mongoose.Types.ObjectId() }, member);

@@ -45,6 +45,14 @@ const guildSchema = mongoose.Schema({
     channel: {
         "type": String,
         "default": undefined
+    },
+    ecoMin: {
+        "type": Number,
+        "default": defaults.ecoMin
+    },
+    ecoMax: {
+        "type": Number,
+        "default": defaults.ecoMax
     }
 });
 
