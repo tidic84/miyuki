@@ -5,7 +5,7 @@ const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 module.exports.run = async (client, message, args) => {
 
-            const ammount = parseInt(args[0]);
+        const ammount = parseInt(args[0]);
 
         if (isNaN(ammount)) {
             return message.reply("ce n'est pas un nombre valide !");
@@ -13,10 +13,15 @@ module.exports.run = async (client, message, args) => {
         else if (ammount < 1 || ammount > 100) {
             return message.reply("Le nombre doit être superieur a **0** et inferieur ou égal a **100**")
         } 
+        const fetched = await message.channel.messages.fetch({ limit:ammount + 1 }, true);
+        
+        message.channel.bulkDelete(fetched, true)
 
-        message.channel.bulkDelete(ammount + 1)
+        .then(async messages => {
+            if(messages.size <=1) {
 
-        .then(async messages => {         
+            } else {
+
             const embed = new MessageEmbed()
                 .setTitle(`${messages.size -1} messages ont été supprimés.`)
                 .setColor(`${blue}`)
@@ -25,6 +30,7 @@ module.exports.run = async (client, message, args) => {
             await delay(3000) 
 
             embedSent.delete();
+            }
             
         });
 };
