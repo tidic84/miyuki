@@ -53,6 +53,10 @@ const guildSchema = mongoose.Schema({
     ecoMax: {
         "type": Number,
         "default": defaults.ecoMax
+    },
+    workCooldown: {
+        "type": Number,
+        "default": defaults.workCooldown
     }
 });
 

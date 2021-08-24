@@ -115,6 +115,46 @@ module.exports.run = (client, message, undefined , settings) => {
                 return message.channel.send(embed)
             }
         }
+        case "prefix": {
+            if (!args[1]) {
+                const embed = new MessageEmbed()
+                    .setTitle('Prefix Settings')
+                    .addField(`Prefix: :`, `\`${settings.prefix}\``)
+                    .setColor(purple)
+                return message.channel.send(embed)
+            }
+            client.updateGuild(message.guild, { prefix: args[1] })
+            const embed = new MessageEmbed()
+                    .setTitle('Prefix Settings')
+                    .addField(`Prefix: :`, `\`${args[1]}\``)
+                    .setColor(purple)
+                return message.channel.send(embed)
+
+        }
+        case "workCooldown": {
+            if (!args[1]) {
+                const embed = new MessageEmbed()
+                    .setTitle('Work cooldown Settings')
+                    .addField(`Cooldown: :`, `\`${settings.workCooldown}\``)
+                    .setColor(purple)
+                return message.channel.send(embed)
+            }
+            const cooldown = args[1]
+            if(isNaN(cooldown)){
+                const embed = new MessageEmbed()
+                    .setTitle('Erreur')
+                    .setDescription(` **'${args[1]}'** n'est pas un nombre valide`)
+                    .setColor(`${red}`)
+                return message.channel.send(embed);
+            }
+            const embed = new MessageEmbed()
+                    .setTitle('Work cooldown Settings')
+                    .addField(`Cooldown: :`, `\`${cooldown}\``)
+                    .setColor(purple)
+                    client.updateGuild(message.guild, { workCooldown: cooldown })
+                return message.channel.send(embed)
+            
+        }
     }
     return client.errorMessage(message, `**${args[0]}** n'est pas un paramètre valide`)
 
