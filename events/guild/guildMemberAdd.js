@@ -7,44 +7,51 @@ module.exports = async (Discord, client, member) => {
     month = today.toLocaleString('fr-FR', { month: 'long' })
     var date = today.getDate()+' '+month+' '+ today.getFullYear()+' '+today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 
+    
+    //
     // AutoRole
+    //
     for(i = 0; i< settings.welcomeRole.length; i++){
         let WelcomeRole = member.guild.roles.cache.find(role => role.id == settings.welcomeRole[i]);
-        member.roles.add(WelcomeRole)    
+        if(WelcomeRole != null || WelcomeRole != undefined) member.roles.add(WelcomeRole)
     }
     
     
+    //
     // Join Message
-    const welcomeType = settings.welcome || "message"
-    const channel = client.channels.cache.get(settings.welcomeChannel);
-    let msg = settings.welcomeMessage;
-    if (msg.includes("{{USER}}")) msg = await msg.replace("{{USER}}", member);
-    if (msg.includes("{{SERVER_NAME}}")) msg = await msg.replace("{{SERVER_NAME}}", member.guild);
-    switch(welcomeType) {
-        case "message": {
-            return channel.send(msg)
+    //
+    const channel = client.channels.cache.get(`${settings.welcomeChannel}`);
+    if (channel != null || channel != undefined) {
+        const welcomeType = settings.welcome || "message"
+        let msg = settings.welcomeMessage;
+        if (msg.includes("{{USER}}")) msg = await msg.replace("{{USER}}", member);
+        if (msg.includes("{{SERVER_NAME}}")) msg = await msg.replace("{{SERVER_NAME}}", member.guild);
+        switch(welcomeType) {
+            case "message": {
+                return channel.send(msg)
+            }
+            case "image": {
+                return channel.send("Bah non, j'ai pas encore fait")
+            }
+            case "embed": {
+                const embed = new MessageEmbed()
+            .setTitle('Heyy !!')
+            .setDescription(msg)
+            .setImage(member.user.displayAvatarURL({ dynamic : true}))
+            .setColor(`${blue}`)
+            .setFooter(date)
+        try {
+        return channel.send(embed)
+        }  catch (error) {
+            console.log(error)
         }
-        case "image": {
-            return channel.send("Bah non, j'ai pas encore fait")
+            }
         }
-        case "embed": {
-            const embed = new MessageEmbed()
-        .setTitle('Heyy !!')
-        .setDescription(msg)
-        .setImage(member.user.displayAvatarURL({ dynamic : true}))
-        .setColor(`${blue}`)
-        .setFooter(date)
-    try {
-    return channel.send(embed)
-    } catch (error) {
-        console.log(error)
     }
-        }
-    }
-
-    
-
-    // Init money system
+  
+    //
+    //INIT ECONOMY
+    //
     const newProfile = {
         userID: member.id,
         userName: member.displayName,
@@ -54,5 +61,7 @@ module.exports = async (Discord, client, member) => {
     }
     if (client.getProfile(member)) return console.log(`${member.displayName} à rejoint mais il à déja un profile.`)
     await client.createProfile(newProfile);
+
+
  
 }

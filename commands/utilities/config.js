@@ -42,11 +42,11 @@ module.exports.run = (client, message, undefined , settings) => {
                 return message.channel.send(embed)
             }
         }
-        case "welcome-message": {
+        case "welcomeMessage": {
             if(!args[1]) {
                 const embed = new MessageEmbed()
                     .setTitle('Welcome Message')
-                    .addField(`Message:`, `\`${settings.welcome-message}\``)
+                    .addField(`Message:`, `\`${settings.welcomeMessage}\``)
                     .setColor(purple)
                 return message.channel.send(embed)
             }
@@ -54,9 +54,25 @@ module.exports.run = (client, message, undefined , settings) => {
                     .setTitle('Welcome Message')
                     .addField(`Message:`, `\`${msg}\``)
                     .setColor(purple)
-            let newValue = new Map()
-            newValue.set("welcome-message", msg)  
-            client.updateGuild(message.guild, newValue)
+            client.updateGuild(message.guild, { welcomeMessage: msg })
+            return message.channel.send(embed)
+
+        }
+        case "welcomeChannel": {
+            if(!args[1]) {
+                const embed = new MessageEmbed()
+                    .setTitle('Welcome Channel')
+                    .addField(`Channel:`, `\`${settings.welcomeChannel}\``)
+                    .setColor(purple)
+                return message.channel.send(embed)
+            }
+            const channel = args[1]
+            if(isNaN(channel)) return client.errorMessage(message, `${channel} n'est pas un nombre valide !`)
+            client.updateGuild(message.guild, { welcomeChannel: channel})
+            const embed = new MessageEmbed()
+                    .setTitle('Welcome Channel')
+                    .addField(`Channel:`, `\`${channel}\``)
+                    .setColor(purple)
             return message.channel.send(embed)
 
         }

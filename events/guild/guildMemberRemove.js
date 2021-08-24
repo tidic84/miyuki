@@ -9,6 +9,7 @@ module.exports = async (Discord, client, member) => {
 
     // Leave Message
     const channel = client.channels.cache.get(settings.welcomeChannel);
+    if (channel == null || channel == undefined) return
     let msg = settings.leaveMessage;
     if (msg.includes("{{USER}}")) msg = await msg.replace("{{USER}}", member.displayName);
     if (msg.includes("{{SERVER_NAME}}")) msg = await msg.replace("{{SERVER_NAME}}", member.guild);
