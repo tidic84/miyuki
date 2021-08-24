@@ -3,6 +3,7 @@ const { blue, green, yellow, red, purple } = require('../../colors.json')
 
 module.exports.run = (client, message, args) => {
 
+    if(!args[0])return client.errorMessage(message, `Il manque l'id du channel`, this)
     const channel = args[0].toString().replace("<", "").replace("#", "").replace(">", "");
     if (message.guild.channels.cache.get(channel) == undefined) return client.errorMessage(message, "Ce salon est invalide", this)
 
@@ -22,5 +23,5 @@ module.exports.help = {
     name: "channel",
     description: "Définit un channel",
     usage: "channel <channel/id>",
-    category: 'utilities'
+    category: 'reaction-role'
 }

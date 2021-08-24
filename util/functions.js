@@ -82,7 +82,6 @@ module.exports = async (client) => {
         for (const key in settings) {
             if (data[key] !== settings[key]) data[key] = settings[key];
         }
-        console.log(settings);
         return data.updateOne(settings).catch(error => {
             console.log(error);
         })
@@ -100,6 +99,7 @@ module.exports = async (client) => {
     }
 
     client.getProfile = async (member, memberGuild) => {
+        const settings = await client.getGuild(member.guild)
         var data = "";
 
         if(memberGuild != undefined) data = await Profile.findOne({ userID: member.id, serverID: memberGuild});
@@ -115,13 +115,13 @@ module.exports = async (client) => {
                 userID: member.id,
                 userName: member.username,
                 serverID: memberGuild,
-                coins: 100,
+                coins: settings.welcomeCoins,
                 bank: 0
             };
             await client.createProfile(newProfile);
     
             
-            return await client.getProfile2(member, memberGuild);
+            return await client.getProfile2(member, member.guild);
             
 
             } else {
@@ -129,7 +129,7 @@ module.exports = async (client) => {
                     userID: member.id,
                     userName: member.displayName,
                     serverID: member.guild.id,
-                    coins: 100,
+                    coins: settings.welcomeCoins,
                     bank: 0
                 };
                 client.createProfile(newProfile);
@@ -159,7 +159,6 @@ module.exports = async (client) => {
         for (const key in settings) {
             if (data[key] !== settings[key]) data[key] = settings[key];
         }
-        console.log(settings);
         return data.updateOne(settings).catch(error => {
             console.log(error);
         })

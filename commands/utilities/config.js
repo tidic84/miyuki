@@ -119,14 +119,14 @@ module.exports.run = (client, message, undefined , settings) => {
             if (!args[1]) {
                 const embed = new MessageEmbed()
                     .setTitle('Prefix Settings')
-                    .addField(`Prefix: :`, `\`${settings.prefix}\``)
+                    .addField(`Prefix:`, `\`${settings.prefix}\``)
                     .setColor(purple)
                 return message.channel.send(embed)
             }
             client.updateGuild(message.guild, { prefix: args[1] })
             const embed = new MessageEmbed()
                     .setTitle('Prefix Settings')
-                    .addField(`Prefix: :`, `\`${args[1]}\``)
+                    .addField(`Prefix:`, `\`${args[1]}\``)
                     .setColor(purple)
                 return message.channel.send(embed)
 
@@ -135,7 +135,7 @@ module.exports.run = (client, message, undefined , settings) => {
             if (!args[1]) {
                 const embed = new MessageEmbed()
                     .setTitle('Work cooldown Settings')
-                    .addField(`Cooldown: :`, `\`${settings.workCooldown}\``)
+                    .addField(`Cooldown:`, `\`${settings.workCooldown}\``)
                     .setColor(purple)
                 return message.channel.send(embed)
             }
@@ -149,11 +149,70 @@ module.exports.run = (client, message, undefined , settings) => {
             }
             const embed = new MessageEmbed()
                     .setTitle('Work cooldown Settings')
-                    .addField(`Cooldown: :`, `\`${cooldown}\``)
+                    .addField(`Cooldown:`, `\`${cooldown}\``)
                     .setColor(purple)
                     client.updateGuild(message.guild, { workCooldown: cooldown })
                 return message.channel.send(embed)
-            
+        }
+        case "welcomeCoins": {
+            if (!args[1]) {
+                const embed = new MessageEmbed()
+                    .setTitle('Welcome Coins Settings')
+                    .addField(`Coins:`, `\`${settings.welcomeCoins}\``)
+                    .setColor(purple)
+                return message.channel.send(embed)
+            }
+            const coins = args[1]
+
+            if(isNaN(coins)){
+                const embed = new MessageEmbed()
+                    .setTitle('Erreur')
+                    .setDescription(` **'${args[1]}'** n'est pas un nombre valide`)
+                    .setColor(`${red}`)
+                return message.channel.send(embed);
+            }
+
+            const embed = new MessageEmbed()
+                    .setTitle('Welcome Coins Settings')
+                    .addField(`Coins:`, `\`${coins}\``)
+                    .setColor(purple)
+                    client.updateGuild(message.guild, { welcomeCoins: coins })
+                return message.channel.send(embed)
+        }
+        case "ticketChannel": {
+            if (!args[1]) {
+                const embed = new MessageEmbed()
+                    .setTitle('Ticket Channel Settings')
+                    .addField(`Channel:`, `\`${settings.ticketChannel}\``)
+                    .setColor(purple)
+                return message.channel.send(embed)
+            }
+            const channel = args[1].toString().replace("<", "").replace("#", "").replace(">", "");
+            if (message.guild.channels.cache.get(channel) == undefined) return client.errorMessage(message, "Ce salon est invalide", this)
+            client.updateGuild(message.guild, { ticketChannel: channel })
+            const embed = new MessageEmbed()
+                    .setTitle('Ticket Channel Settings')
+                    .addField(`Channel:`, `\`${channel}\``)
+                    .setColor(purple)
+                return message.channel.send(embed)
+        }
+        case "ticketCategory": {
+            if (!args[1]) {
+                const embed = new MessageEmbed()
+                    .setTitle('Ticket Settings')
+                    .addField(`Category:`, `\`${settings.ticketCategory}\``)
+                    .setColor(purple)
+                return message.channel.send(embed)
+            }
+            const category = args[1];
+            if (message.guild.channels.cache.get(category) == undefined) return client.errorMessage(message, "Cette catégorie est invalide", this)
+            client.updateGuild(message.guild, { ticketCategory: category })
+
+            const embed = new MessageEmbed()
+                    .setTitle('Ticket Settings')
+                    .addField(`Category:`, `\`${category}\``)
+                    .setColor(purple)
+                return message.channel.send(embed)
         }
     }
     return client.errorMessage(message, `**${args[0]}** n'est pas un paramètre valide`)

@@ -31,5 +31,5 @@ module.exports.help = {
     name: "message",
     description: "Définit un message",
     usage: "message <message id>",
-    category: 'utilities'
+    category: 'reaction-role'
 }

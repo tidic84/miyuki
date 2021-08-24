@@ -52,16 +52,15 @@ module.exports = async (Discord, client, member) => {
     //
     //INIT ECONOMY
     //
-    const newProfile = {
-        userID: member.id,
-        userName: member.displayName,
-        serverID: member.guild.id,
-        coins: 100,
-        bank: 0
-    }
-    if (client.getProfile(member)) return console.log(`${member.displayName} à rejoint mais il à déja un profile.`)
-    await client.createProfile(newProfile);
-
+    // const newProfile = {
+    //     userID: member.id,
+    //     userName: member.displayName,
+    //     serverID: member.guild.id,
+    //     coins: settings.welcomeCoins,
+    //     bank: 0
+    // }
+    // console.log(settings.welcomeCoins)
+    //client.getProfile(member)
 
  
 }

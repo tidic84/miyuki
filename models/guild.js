@@ -57,6 +57,18 @@ const guildSchema = mongoose.Schema({
     workCooldown: {
         "type": Number,
         "default": defaults.workCooldown
+    },
+    welcomeCoins: {
+        "type": Number,
+        'default': defaults.welcomeCoins
+    },
+    ticketChannel: {
+        "type": String,
+        "default": undefined
+    },
+    ticketCategory: {
+        "type": String,
+        "default": undefined
     }
 });
 

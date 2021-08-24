@@ -7,7 +7,8 @@ module.exports = {
     leaveMessage: "Aurevoir **{{USER}}**\n On espère te revoir bientot :cry:",
     ecoMin: 1,
     ecoMax: 50,
-    workCooldown: 3600
+    workCooldown: 3600,
+    welcomeCoins: 100
   }
 }
 

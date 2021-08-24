@@ -4,6 +4,7 @@ client.commands = new Discord.Collection();
 
 const mongoose = require("mongoose");
 require('./util/functions')(client);
+require("discord-buttons")(client);
 require('dotenv').config();
 
 ['command_handler', 'event_handler'].forEach(handler => {
