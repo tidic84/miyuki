@@ -1,8 +1,9 @@
 const { MessageEmbed } = require('discord.js');
 const { blue, green, yellow, red, purple } = require('../../colors.json')
 const DB = require("../../res/db.json")
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
-module.exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args, settings) => {
 
     if(!settings.channel)return client.errorMessage(message, `Le channel n'est pas défini\nUsage: \`channel <channelid/channel>\``)
     if(!settings.message)return client.errorMessage(message, `Le message n'est pas défini\nUsage: \`message <messageid>\``)
@@ -28,9 +29,10 @@ module.exports.run = async (client, message, args) => {
                 msgReact.set(msg.id, new Map())
                 await client.updateGuild(message.guild, { messageReact: msgReact })
             }
-
+            console.log(msg.id)
             let emojisRole = msgR.get(msg.id)
-            emojisRole[`!${reaction._emoji.name}`] = role.id
+            console.log(emojisRole)
+            emojisRole[`&!${reaction._emoji.name}`] = role.id
             let msgReact = new Map()
             msgReact.set(msg.id, emojisRole)
 
@@ -47,7 +49,7 @@ module.exports.run = async (client, message, args) => {
             }
 
             let emojisRole = msgR.get(msg.id)
-            emojisRole[reaction._emoji.id] = role.id
+            emojisRole[`&${reaction._emoji.id}`] = role.id
             let msgReact = new Map()
             msgReact.set(msg.id, emojisRole)
 
@@ -61,7 +63,7 @@ module.exports.run = async (client, message, args) => {
         .setTitle(`Réaction ajouté !`)
         .setAuthor(message.member.displayName, message.author.displayAvatarURL({ dynamic : true }))
         .setColor(`${purple}`)
-        .addField("Salon", `<#${channel}>`)
+        .addField("Salon", `<#${settings.channel}>`)
         .addField("Message", `${msg.id} | ${msg}`)
         .addField("Emoji", `${emoji}`)
         .addField("Role", `${role}`)

@@ -23,7 +23,7 @@ module.exports = async (client) => {
         return a[0].toUpperCase() + a.substring(1)
     }
 
-     client.loadMessagesReact = async (client) => {
+    client.loadMessagesReact = async (client) => {
 
         client.guilds.cache.forEach(async guild => {
 

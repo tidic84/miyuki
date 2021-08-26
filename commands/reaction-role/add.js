@@ -4,9 +4,6 @@ const { blue, green, yellow, red, purple } = require('../../colors.json')
 
 module.exports.run = async (client, message, args, settings) => {
 
-    
-     
-
     if(!settings.channel)return client.errorMessage(message, `Le channel n'est pas défini\nUsage: \`channel <channelid/channel>\``)
     if(!settings.message)return client.errorMessage(message, `Le message n'est pas défini\nUsage: \`message <messageid>\``)
     if(!args[0])return client.errorMessage(message, `L'emoji n'est pas défini`, this)

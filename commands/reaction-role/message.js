@@ -4,6 +4,7 @@ const { blue, green, yellow, red, purple } = require('../../colors.json')
 module.exports.run = async (client, message, args, settings) => {
     if(!args[0])return client.errorMessage(message, `Il manque l'id du message`, this)
     if(!settings.channel)return client.errorMessage(message, `Il faut d'abord définir le channel`, this)
+    let msgRe = await message.guild.channels.cache.get(settings.channel).messages.fetch(settings.message);
 
     const msg = args[0]
 
@@ -16,6 +17,12 @@ module.exports.run = async (client, message, args, settings) => {
     if (isValid == false) return client.errorMessage(message, "Ce message est inexistant", this)
 
     client.updateGuild(message.guild, { message: msg })
+    const msgR = settings.messageReact;
+    if (!msgR.has(msgRe.id)){
+        let msgReact = new Map()
+        msgReact.set(msg.id, new Map())
+        await client.updateGuild(message.guild, { messageReact: msgReact })
+    }
 
     const embed = new MessageEmbed()
         .setTitle(`Message défini`)
