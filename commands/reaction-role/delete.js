@@ -2,17 +2,11 @@ const { MessageEmbed } = require('discord.js');
 const { blue, green, yellow, red, purple } = require('../../colors.json')
 const DB = require("../../res/db.json")
 
-module.exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args, settings) => {
 
+    if(!settings.message)return client.errorMessage(message, `Le message n'est pas défini`)
     if(!args[0])return client.errorMessage(message, `L'emoji n'est pas défini`, this)
             
-    let emoji = `${args[0]}`;
-        
-    msg.react(emoji)
-
-    // DB[message.guild.id]["messageReactEventAdd"][msg.id][emoji] = role.id;
-    // client.saveDB(DB, message);
-
     const embed = new MessageEmbed()
         .setTitle(`Réaction ajouté !`)
         .setAuthor(message.member.displayName, message.author.displayAvatarURL({ dynamic : true }))
