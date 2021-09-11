@@ -20,6 +20,7 @@
     "mysql": "^2.18.1",
     "node": "^16.3.0",
     "opusscript": "0.0.8",
+    "pronote-api-again": "^2.3.5",
     "yt-search": "^2.9.0",
     "ytdl-core": "^4.9.1"
   }

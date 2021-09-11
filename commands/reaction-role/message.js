@@ -19,8 +19,9 @@ module.exports.run = async (client, message, args, settings) => {
     client.updateGuild(message.guild, { message: msg })
     const msgR = settings.messageReact;
     if (!msgR.has(msgRe.id)){
-        let msgReact = new Map()
-        msgReact.set(msg.id, new Map())
+        // let msgReact = new Map()
+        // msgReact.add(msg.id, new Map())
+        msgR.add(msg.id, new Map())
         await client.updateGuild(message.guild, { messageReact: msgReact })
     }
 
