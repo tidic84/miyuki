@@ -2,17 +2,17 @@ const { MessageEmbed } = require("discord.js");
 var play = require("./play")
 
 module.exports.run = (client, message, args) => {
-  play.stop(message, client)
+  play.music(message, client)
 
 };
 
 module.exports.help = {
-  name: "stop",
-  aliases: ["stop"],
+  name: "music",
+  aliases: ["sound", "music", "now", "nowPlaying"],
   category: "music",
-  description: "Arrete la musique",
+  description: "Affiche la musique en cours",
   cooldown: 1,
-  usage: "stop",
+  usage: "music",
   isUserAdmin: false,
   permissions: false,
   args: false,

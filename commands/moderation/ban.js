@@ -1,62 +1,45 @@
-const { MessageEmbed } = require('discord.js');
-const { blue, green, yellow, red } = require('../../colors.json')
+const { MessageEmbed } = require("discord.js");
 
-module.exports.run = async (client, message, args) => {
-    
-        if(!message.member.hasPermission('BAN_MEMBERS')) {
-            const embed = new MessageEmbed()
-                .setTitle(`Erreur`)
-                .setColor(`${red}`)
-                .setDescription(`:x: Vous n'avez pas la permission d'utiliser cette commande !`)
-        return message.channel.send(embed);
-        }
-        const member = message.mentions.members.first()
+module.exports.run = (client, message, args) => {
+  let user = message.mentions.users.first();
+  let banReason = args.splice(1).join(" ") || "Aucune raison spécifiée";
+  user
+    ? message.guild.bans.create(user, { days: 7, reason: banReason })
+    : message.channel.send("L'utilisateur n'existe pas.");
 
-        if (!member) {
-            const embed = new MessageEmbed()
-                .setTitle(`Erreur`)
-                .setColor(`${red}`)
-                .setDescription(`:x: Vous ne pouvez pas bannir Casper !`)
-        return message.channel.send(embed);
-        }
+  const embed = new MessageEmbed()
+    .setAuthor(`${user.username} (${user.id})`)
+    .setColor("#dc143c")
+    .setDescription(`**Action**: ban\n**Raison**: ${banReason}`)
+    .setThumbnail(user.avatarURL())
+    .setTimestamp()
+    .setFooter(message.author.username, message.author.avatarURL());
 
-        if (member.id === message.guild.ownerID) {
-            const embed = new MessageEmbed()
-                .setTitle(`Erreur`)
-                .setColor(`${red}`)
-                .setDescription(`:x: Vous ne pouvez pas bannir le propriétaire du serveur !`)
-        return message.channel.send(embed);
-        }
+    const publicEmbed = new MessageEmbed()
+    .setAuthor(`${user.tag} | Ban`, user.displayAvatarURL())
+    .setThumbnail(user.displayAvatarURL())
+    .addFields(
+      { name: "Utilisateur", value: user.username, inline: true },
+      { name: "ID", value: user.id, inline: true },
+      {
+        name: "Raison",
+        value: banReason,
+      }
+    )
+    .setTimestamp()
+    .setFooter(`Banni par ${message.author.username}`, message.author.displayAvatarURL());
 
-        const reason = args.slice(1).join(' ') || "Aucune raison fournie";
-        try {
-            await member.ban({reason})
-            } catch (error) {
-                if (error == 'DiscordAPIError: Missing Permissions'){
-                    const embed = new MessageEmbed()
-                    .setTitle(`Erreur`)
-                    .setColor(`${red}`)
-                    .setDescription(`:x: Tu n'as pas les permission pour bannir ce membre`)
-                return message.channel.send(embed);
-                }
-                const embed = new MessageEmbed()
-                    .setTitle(`Erreur`)
-                    .setColor(`${red}`)
-                    .setDescription(`:x: Une erreur est survenue`)
-                    .setFooter(error)
-                return message.channel.send(embed);
-            }
-        const embed = new MessageEmbed()
-                .setTitle(`Ban`)
-                .setColor(`${green}`)
-                .setDescription(`:white_check_mark: ${member.user.tag} a été banni !`)
-        message.channel.send(embed);
-        
+  message.channel.send({embeds: [embed]});
 };
 
 module.exports.help = {
-    name: 'ban',
-    description: 'Sert a bannir des joueurs du serveur',
-    usage: "ban <@membre> <raison>",
-    category: "moderation"
-}
+  name: "ban",
+  aliases: ["ban"],
+  category: "moderation",
+  description: "Ban un utilisateur",
+  cooldown: 1,
+  usage: "<@user> <raison>",
+  isUserAdmin: true,
+  permissions: true,
+  args: true,
+};

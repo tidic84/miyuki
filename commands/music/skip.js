@@ -1,15 +1,19 @@
-const { MessageEmbed } = require('discord.js');
-const { blue, green, yellow, red, purple } = require('../../colors.json')
+const { MessageEmbed } = require("discord.js");
 var play = require("./play")
 
-module.exports.run = async (client, message, args) => {
-    play.skip(message, client)
-}
+module.exports.run = (client, message, args) => {
+  play.skip(message, client)
+
+};
 
 module.exports.help = {
-    name: "skip",
-    description: "saute une musique",
-    usage: "skip",
-    aliases : ["sk"],
-    category: 'music'
-}
+  name: "skip",
+  aliases: ["sk"],
+  category: "music",
+  description: "Saute une musique",
+  cooldown: 1,
+  usage: "skip",
+  isUserAdmin: false,
+  permissions: false,
+  args: false,
+};

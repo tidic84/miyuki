@@ -1,25 +1,15 @@
 const Discord = require('discord.js');
-const client = new Discord.Client();
+const client = new Discord.Client({ 
+    intents: [
+        Discord.Intents.FLAGS.GUILDS,
+        Discord.Intents.FLAGS.GUILD_MESSAGES,
+        Discord.Intents.FLAGS.GUILD_VOICE_STATES
+    ] 
+});
 client.commands = new Discord.Collection();
 
-const mongoose = require("mongoose");
-require('./util/functions')(client);
-require("discord-buttons")(client);
+require('./util/functions')(client, Discord);
 require('dotenv').config();
 
-['command_handler', 'event_handler'].forEach(handler => {
-    require(`./handlers/${handler}`)(client, Discord);
-})
-
-
+client.start()
 client.login(process.env.TOKEN);
-
-mongoose.connect(process.env.MONGODB_SRV, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false
-}).catch((error) => {
-    console.log(error)
-}).then(()=>{
-    console.log("Connected to the database")
-});

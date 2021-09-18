@@ -1,66 +1,45 @@
-const { MessageEmbed } = require('discord.js');
-const { blue, green, yellow, red } = require('../../colors.json')
+const { MessageEmbed } = require("discord.js");
 
-module.exports.run = async (client, message, args) => {
-    
-    
-        if(!message.member.hasPermission('KICK_MEMBERS')) {
-            const embed = new MessageEmbed()
-                .setTitle(`Erreur`)
-                .setColor(`${red}`)
-                .setDescription(`:x: Vous n'avez pas la permission d'utiliser cette commande !`)
-        return message.channel.send(embed);
-        }
-        const member = message.mentions.members.first()
+module.exports.run = (client, message, args) => {
+  let member = message.mentions.members.first();
+  let reason = args.splice(1).join(" ") || "Aucune raison spécifiée";
+  member
+    ? member.kick(reason)
+    : message.channel.send("L'utilisateur n'existe pas.");
 
-        if (!member) {
-            const embed = new MessageEmbed()
-                .setTitle(`Erreur`)
-                .setColor(`${red}`)
-                .setDescription(`:x: Vous ne pouvez pas expulser Casper !`)
-        return message.channel.send(embed);
-        }
+  const embed = new MessageEmbed()
+    .setAuthor(`${member.user.username} (${member.user.id})`)
+    .setColor("#ffa500")
+    .setDescription(`**Action**: kick\n**Raison**: ${reason}`)
+    .setThumbnail(member.user.avatarURL())
+    .setTimestamp()
+    .setFooter(message.author.username, message.author.avatarURL());
 
-        if (member.id === message.guild.ownerID) {
-            const embed = new MessageEmbed()
-                .setTitle(`Erreur`)
-                .setColor(`${red}`)
-                .setDescription(`:x: Vous ne pouvez pas expulser le propriétaire du serveur !`)
-        return message.channel.send(embed);
-        }
+    const publicEmbed = new MessageEmbed()
+    .setAuthor(`${member.user.tag} | Kick`, member.user.displayAvatarURL())
+    .setThumbnail(member.user.displayAvatarURL())
+    .addFields(
+      { name: "Utilisateur", value: member.user.username, inline: true },
+      { name: "ID", value: member.user.id, inline: true },
+      {
+        name: "Raison",
+        value: reason,
+      }
+    )
+    .setTimestamp()
+    .setFooter(`Kick par ${message.author.username}`, message.author.displayAvatarURL());
 
-        const reason = args.slice(1).join(' ') || "Aucune raison fournie";
-
-        try {
-        await member.kick(reason)
-        } catch (error) {
-            if (error == 'DiscordAPIError: Missing Permissions'){
-                const embed = new MessageEmbed()
-                .setTitle(`Erreur`)
-                .setColor(`${red}`)
-                .setDescription(`:x: Tu n'as pas les permission pour expulser ce membre`)
-            return message.channel.send(embed);
-            }
-            const embed = new MessageEmbed()
-                .setTitle(`Erreur`)
-                .setColor(`${red}`)
-                .setDescription(`:x: Une erreur est survenue`)
-                .setFooter(error)
-            return message.channel.send(embed);
-        }
-
-            
-        const embed = new MessageEmbed()
-                .setTitle(`Kick`)
-                .setColor(`${green}`)
-                .setDescription(`:white_check_mark: ${member.user.tag} s'est fait désintégré`)
-        message.channel.send(embed);
-        
+  message.channel.send({embeds: [embed]});
 };
 
 module.exports.help = {
-    name: 'kick',
-    description: 'Sert a expulser des joueurs du serveur',
-    usage: "kick <@membre> <raison>",
-    category: "moderation"
-}
+  name: "kick",
+  aliases: ["kick"],
+  category: "moderation",
+  description: "Kick un utilisateur",
+  cooldown: 1,
+  usage: "<@user> <raison>",
+  isUserAdmin: true,
+  permissions: true,
+  args: true,
+};

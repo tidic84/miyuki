@@ -1,15 +1,19 @@
-const { MessageEmbed } = require('discord.js');
-const { blue, green, yellow, red, purple } = require('../../colors.json')
+const { MessageEmbed } = require("discord.js");
 var play = require("./play")
 
-module.exports.run = async (client, message, args) => {
-    play.queue(message, client)
-}
+module.exports.run = (client, message, args) => {
+  play.queue(message, client)
+
+};
 
 module.exports.help = {
-    name: "queue",
-    description: "affiche la liste d'attente",
-    aliases: ["list"],
-    usage: "queue",
-    category: 'music'
-}
+  name: "queue",
+  aliases: ["queue", "list"],
+  category: "music",
+  description: "Affiche la liste d'attente",
+  cooldown: 1,
+  usage: "queue",
+  isUserAdmin: false,
+  permissions: false,
+  args: false,
+};
