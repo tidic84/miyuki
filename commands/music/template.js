@@ -11,7 +11,7 @@ module.exports.help = {
   description: "template",
   cooldown: 1,
   usage: "",
-  isUserAdmin: true,
-  permissions: true,
+  isUserAdmin: false,
+  permissions: false,
   args: false,
 };

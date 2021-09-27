@@ -48,7 +48,7 @@ module.exports.queue = function(message, client) {
     var msg = [];
     var msgSend = "";
     for( i = 0; i < guildQueue.songs.length; i++) {
-        msg.push(`${i+1} - ${guildQueue.songs[i]}\n`)
+        msg.push(`${i+1} - \`${guildQueue.songs[i]}\`\n`)
     
     }
 
@@ -98,6 +98,42 @@ module.exports.skip = function(message, client) {
    message.channel.send({embeds: [embed]});
 }
 
+// //##############
+// //### PLIST ####
+// //##############
+module.exports.playlist = async function(message, client, args) {
+  const voice_channel = message.member.voice.channel;
+
+  if(!message.guild)return;
+  if(args == 0) return client.errorMessage(message, "Il manque le lien ou le nom de la vidéo.", this)
+  if(!voice_channel) return client.errorMessage(message,"Vous devez être dans un salon vocal")
+
+
+  let embedSong = new MessageEmbed()
+    .setTitle(`Recherche`)
+    .setColor(`${yellow}`)
+    .setDescription(`:arrows_counterclockwise: Recherche de la vidéo`)
+  const embed = await message.channel.send({embeds: [embedSong]})
+  
+  let guildQueue = client.player.getQueue(message.guild.id);
+  
+  let queue = client.player.createQueue(message.guild.id);
+  await queue.join(message.member.voice.channel);
+  let song = await queue.playlist(args.join(' ')).catch(_ => {
+      if(!guildQueue)
+          queue.stop();
+  });
+  embedSong = new MessageEmbed()
+          .setAuthor(`Lecture`)
+          .setTitle(`${song.name}`)
+          .setURL(`${song.url}`)
+          .setColor(`${green}`)
+          .setDescription(`:white_check_mark: Lecture de la vidéo`)
+  embed.edit({embeds: [embedSong]})
+  
+
+}
+
 //##############
 //### MUSIC ####
 //##############
@@ -112,7 +148,7 @@ module.exports.music = async function(message, client) {
   const embed = new MessageEmbed()
       .setTitle(`:musical_note: Now Playing :musical_note:`)
       .setColor(`${blue}`)
-      .setDescription(`${guildQueue.songs}\n${ProgressBar}`)
+      .setDescription(`${guildQueue.songs[0]}\n${ProgressBar.prettier}`)
    message.channel.send({embeds: [embed]});
 }
 
