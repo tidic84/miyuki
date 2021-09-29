@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@discordjs/opus": "^0.5.3",
-    "discord-music-player": "^8.0.2",
+    "discord-music-player": "^8.1.0",
     "discord.js": "^13.1.0",
     "dotenv": "^10.0.0",
     "ffmpeg-static": "^4.4.0",

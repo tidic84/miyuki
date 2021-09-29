@@ -13,29 +13,17 @@ module.exports.run = async (client, message, args) => {
   if(args == 0) return client.errorMessage(message, "Il manque le lien ou le nom de la vidéo.", this)
   if(!voice_channel) return client.errorMessage(message,"Vous devez être dans un salon vocal")
 
-
-  let embedSong = new MessageEmbed()
-    .setTitle(`Recherche`)
-    .setColor(`${yellow}`)
-    .setDescription(`:arrows_counterclockwise: Recherche de la vidéo`)
-  const embed = await message.channel.send({embeds: [embedSong]})
-
-  let guildQueue = client.player.getQueue(message.guild.id);
-
-  let queue = client.player.createQueue(message.guild.id);
+  let queue = client.player.createQueue(message.guild.id, {
+    data: {
+      message: message
+    }
+  });
   await queue.join(message.member.voice.channel);
   let song = await queue.play(args.join(' ')).catch(_ => {
       if(!guildQueue)
           queue.stop();
   })
-  embedSong = new MessageEmbed()
-            .setAuthor(`Lecture`)
-            .setTitle(`${song.name}`)
-            .setURL(`${song.url}`)
-            .setColor(`${green}`)
-            .setDescription(`:white_check_mark: Lecture de la vidéo`)
-            .setThumbnail(`${song.thumbnail}`)
-    embed.edit({embeds: [embedSong]})
+
 
 }
 
@@ -88,7 +76,9 @@ module.exports.stop = function(message, client) {
 //##############
 module.exports.skip = function(message, client) {
   let guildQueue = client.player.getQueue(message.guild.id);
-  
+  guildQueue.setData({
+    message: message
+  });
   guildQueue.skip();
 
   const embed = new MessageEmbed()
@@ -107,30 +97,19 @@ module.exports.playlist = async function(message, client, args) {
   if(!message.guild)return;
   if(args == 0) return client.errorMessage(message, "Il manque le lien ou le nom de la vidéo.", this)
   if(!voice_channel) return client.errorMessage(message,"Vous devez être dans un salon vocal")
-
-
-  let embedSong = new MessageEmbed()
-    .setTitle(`Recherche`)
-    .setColor(`${yellow}`)
-    .setDescription(`:arrows_counterclockwise: Recherche de la vidéo`)
-  const embed = await message.channel.send({embeds: [embedSong]})
   
   let guildQueue = client.player.getQueue(message.guild.id);
-  
-  let queue = client.player.createQueue(message.guild.id);
+
+  let queue = client.player.createQueue(message.guild.id, {
+    data: {
+      message: message,
+    }
+  });
   await queue.join(message.member.voice.channel);
   let song = await queue.playlist(args.join(' ')).catch(_ => {
       if(!guildQueue)
           queue.stop();
   });
-  embedSong = new MessageEmbed()
-          .setAuthor(`Lecture`)
-          .setTitle(`${song.name}`)
-          .setURL(`${song.url}`)
-          .setColor(`${green}`)
-          .setDescription(`:white_check_mark: Lecture de la vidéo`)
-  embed.edit({embeds: [embedSong]})
-  
 
 }
 
@@ -146,9 +125,12 @@ module.exports.music = async function(message, client) {
 
 
   const embed = new MessageEmbed()
-      .setTitle(`:musical_note: Now Playing :musical_note:`)
+      .setAuthor(`🎵 Now Playing 🎵`)
       .setColor(`${blue}`)
-      .setDescription(`${guildQueue.songs[0]}\n${ProgressBar.prettier}`)
+      .setURL(guildQueue.songs[0].url)
+      .setTitle(`${guildQueue.songs[0]}`)
+      .setFooter(ProgressBar.prettier)
+      .setThumbnail(guildQueue.songs[0].thumbnail)
    message.channel.send({embeds: [embed]});
 }
 

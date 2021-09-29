@@ -9,6 +9,7 @@ const client = new Discord.Client({
 client.commands = new Discord.Collection();
 
 require('./util/functions')(client, Discord);
+require('./util/player')(client);
 require('dotenv').config();
 
 client.start()

@@ -24,11 +24,6 @@ module.exports = async (client, Discord) => {
         loadCommands(client);
         loadEvents(client);
 
-        const { Player } = require("discord-music-player");
-        const player = new Player(client, {
-            leaveOnEmpty: false,
-        });
-        client.player = player;
     }
 
 }
