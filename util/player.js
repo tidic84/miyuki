@@ -31,7 +31,7 @@ module.exports = async (client, Discord) => {
                 queue.data.message.channel.send({embeds: [embedSong]})
             })
             .on('error', (error, queue) => {
-                console.log(`Error: ${error} in ${queue.guild.name}`);
+                console.log(`Error: ${error}`);
             })
 
 }
