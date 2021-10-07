@@ -1,7 +1,8 @@
 const { MessageEmbed } = require("discord.js");
 const { blue, green, yellow, red, purple } = require('../../colors.json')
+const { RepeatMode } = require('discord-music-player');
 
-var loop = false;
+var loop = "false";
 
 //##############
 //###  PLAY  ###
@@ -32,7 +33,12 @@ module.exports.run = async (client, message, args) => {
 //##############
 module.exports.queue = function(message, client) {
     var guildQueue = client.player.getQueue(message.guild.id);
-    var loopStatus = "désactivé";
+
+    if(!guildQueue) return client.errorMessage(message, `Il n'y a pas de musique actuellement`)
+    if(!guildQueue.isPlaying) return client.errorMessage(message, `Il n'y a pas de musique actuellement`)
+
+
+    var loopStatus = "La boucle est désactivé";
     var msg = [];
     var msgSend = "";
     for( i = 0; i < guildQueue.songs.length; i++) {
@@ -40,9 +46,16 @@ module.exports.queue = function(message, client) {
     
     }
 
-    if(loop){
-        loopStatus = "activé";
+    if(loop == "true"){
+      loopStatus = "La boucle est activé"
+    } 
+    else if(loop == "false") {
+      loopStatus = "La boucle est désactivé"
     }
+    else if(loop = "queue") {
+      loopStatus = "La boucle est activé pour toute la queue"
+    }
+    
     console.log(msg)
     msgSend = `${msg}`
     
@@ -54,7 +67,7 @@ module.exports.queue = function(message, client) {
         .setTitle(`Liste d'attente`)
         .setColor(`${blue}`)
         .setDescription(`${msgSend}`)
-        .setFooter(`La boucle est ${loopStatus}`)
+        .setFooter(loopStatus)
     message.channel.send({embeds: [embed]});
 }
 
@@ -63,6 +76,9 @@ module.exports.queue = function(message, client) {
 //##############
 module.exports.stop = function(message, client) {
   let guildQueue = client.player.getQueue(message.guild.id);
+  if(!guildQueue) return client.errorMessage(message, `Il n'y a pas de musique actuellement`)
+  if(!guildQueue.isPlaying) return client.errorMessage(message, `Il n'y a pas de musique actuellement`)
+
   guildQueue.stop();
   const embed = new MessageEmbed()
         .setTitle(`Arrêt`)
@@ -76,6 +92,9 @@ module.exports.stop = function(message, client) {
 //##############
 module.exports.skip = function(message, client) {
   let guildQueue = client.player.getQueue(message.guild.id);
+  if(!guildQueue) return client.errorMessage(message, `Il n'y a pas de musique actuellement`)
+  if(!guildQueue.isPlaying) return client.errorMessage(message, `Il n'y a pas de musique actuellement`)
+  
   guildQueue.setData({
     message: message
   });
@@ -134,6 +153,71 @@ module.exports.music = async function(message, client) {
    message.channel.send({embeds: [embed]});
 }
 
+//##############
+//#### LOOP ####
+//##############
+module.exports.loop = async function(message, client) {
+  let guildQueue = client.player.getQueue(message.guild.id);
+  if(!guildQueue) return client.errorMessage(message, `Il n'y a pas de musique actuellement`)
+  if(!guildQueue.isPlaying) return client.errorMessage(message, `Il n'y a pas de musique actuellement`)
+
+  console.log(guildQueue.repeatMode)
+
+  if(guildQueue.repeatMode == 1) {
+    guildQueue.setRepeatMode(RepeatMode.DISABLED)
+
+    loop = "false"
+    const embed = new MessageEmbed()
+      .setColor(`${blue}`)
+      .setTitle(`Boucle`)
+      .setDescription(`:repeat: La boucle a été désactivé`)
+    message.channel.send({embeds: [embed]});
+  } 
+  
+  else if (guildQueue.repeatMode == 0) {
+    guildQueue.setRepeatMode(RepeatMode.SONG)
+
+    loop = "true"
+    const embed = new MessageEmbed()
+      .setColor(`${blue}`)
+      .setTitle(`Boucle`)
+      .setDescription(`:repeat: La boucle a été activé`)
+    message.channel.send({embeds: [embed]});
+  }
+  
+}
+
+//##############
+//### LOOPQ ####
+//##############
+module.exports.loopqueue = async function(message, client) {
+  let guildQueue = client.player.getQueue(message.guild.id);
+  if(!guildQueue) return client.errorMessage(message, `Il n'y a pas de musique actuellement`)
+  if(!guildQueue.isPlaying) return client.errorMessage(message, `Il n'y a pas de musique actuellement`)
+
+  if(guildQueue.repeatMode == 2) {
+    guildQueue.setRepeatMode(RepeatMode.DISABLED)
+
+    loop = "false"
+    const embed = new MessageEmbed()
+      .setColor(`${blue}`)
+      .setTitle(`Boucle`)
+      .setDescription(`:repeat: La boucle a été désactivé`)
+    message.channel.send({embeds: [embed]});
+  } 
+  
+  else if (guildQueue.repeatMode == 0 || guildQueue.repeatMode == 1) {
+    guildQueue.setRepeatMode(RepeatMode.QUEUE)
+
+    loop = "queue"
+    const embed = new MessageEmbed()
+      .setColor(`${blue}`)
+      .setTitle(`Boucle`)
+      .setDescription(`:repeat: La boucle a été activé pour toute la queue`)
+    message.channel.send({embeds: [embed]});
+  }
+  
+}
 module.exports.help = {
   name: "play",
   aliases: ["pl", "p"],

@@ -38,8 +38,7 @@ module.exports.help = {
   name: "clear",
   aliases: ["clear"],
   category: "moderation",
-  description:
-    "Purge un nombre de message spécifié",
+  description:"Purge un nombre de message spécifié",
   cooldown: 1,
   usage: "clear <nbr_messages>",
   isUserAdmin: true,
