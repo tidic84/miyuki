@@ -41,5 +41,5 @@ module.exports.help = {
   description:"Purge un nombre de message spécifié",
   cooldown: 1,
   usage: "clear <nbr_messages>",
-  isUserAdmin: true,
+  isUserAdmin: false,
 };
