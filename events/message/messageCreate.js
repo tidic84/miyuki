@@ -11,12 +11,11 @@ module.exports = async (client, message) => {
             lastMessage = messages.last();
         })
         if (isNaN(msgContent)) { 
-            message.delete();
-            return ;
+            return message.delete();
         };
         
         if (isNaN(lastMessage.content)) {
-            lastMessage.delete();
+            return lastMessage.delete();
         }
 
         if (lastMessage == undefined) {
@@ -24,7 +23,7 @@ module.exports = async (client, message) => {
         }
 
         if (lastMessage.author.id == message.author.id) {
-            message.delete();
+            return message.delete();
         }
 
         if (parseInt(msgContent) != parseInt(lastMessage.content) + 1) {
